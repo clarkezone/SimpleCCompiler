@@ -1,5 +1,5 @@
 [package]
-name = "SimpleCCompiler"
+name = "simple_c_compiler"
 version = "0.1.0"
 authors = ["James Clarke <james@clarkezone.net>"]
 
