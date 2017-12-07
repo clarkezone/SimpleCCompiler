@@ -1,0 +1,6 @@
+[package]
+name = "SimpleCCompiler"
+version = "0.1.0"
+authors = ["James Clarke <james@clarkezone.net>"]
+
+[dependencies]
