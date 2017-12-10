@@ -48,8 +48,18 @@ mod lexer {
                     end_char: mat2.end() as u32,
                 };
 
+                //Find the correct place to insert this token in the line token list
+                let mut insertpos: usize = 0;
+
+                for i in collector.into_iter() {
+                    if i.start_char > new_token_info.start_char {
+                        break;
+                    }
+                    insertpos = insertpos + 1;
+                }
+
                 //Add token to token collector
-                collector.push(new_token_info);
+                collector.insert(insertpos, new_token_info);
             }
         }
     }
@@ -59,7 +69,7 @@ mod lexer {
         P: AsRef<Path>,
     {
         let lines = lines_from_file(filename);
-        let mut collector: Vec<TokenInfo> = Vec::new();
+        let collector: Vec<TokenInfo> = Vec::new();
     }
 
     fn lexinternal(lines: Vec<String>, collector: &mut Vec<TokenInfo>) {
@@ -69,7 +79,8 @@ mod lexer {
         let mut line_num: u32 = 1;
         for line in lines {
             println!("{} {:?}", line_num, line);
-            let tokens = get_tokens(&line, line_num, &extractors, collector);
+
+            get_tokens(&line, line_num, &extractors, collector);
             line_num = line_num + 1;
         }
     }
@@ -88,20 +99,34 @@ mod lexer {
         extractors: &Vec<TokenExtractor>,
         collector: &mut Vec<TokenInfo>,
     ) {
+        let mut lineTokens: Vec<TokenInfo> = Vec::new();
         for e in extractors.into_iter() {
-            e.get_token(line, num, collector);
+            e.get_token(line, num, &mut lineTokens);
         }
+
+        //Move line tokens to tokens
+        collector.append(&mut lineTokens)
     }
 
     mod tests {
         #[test]
         fn test_token_extract() {
-            let lines = vec![String::from(r"foo{"), String::from(r"shebar}ss{")];
+            let lines = vec![
+                String::from(r"foo{"),
+                String::from(r"shebar}ss{"),
+                String::from(r"she{bar}ss"),
+            ];
 
             let mut collector: Vec<super::TokenInfo> = Vec::new();
             super::lexinternal(lines, &mut collector);
 
-            assert_eq!(collector.len(), 3);
+            assert_eq!(collector.len(), 5);
+            assert_eq!(collector[1].start_char, 6);
+
+            print!("Token list:");
+            for i in collector.into_iter() {
+                print!("{},", i.token_type as i32);
+            }
         }
 
         #[test]
