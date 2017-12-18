@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-mod lexer {
+pub mod lexer {
     use std::fmt::*;
     use std::path::Path;
     use fileutils::lines_from_file;
@@ -27,11 +27,11 @@ mod lexer {
     }
 
     pub struct TokenInfo {
-        token_type: TokenType,
+        pub token_type: TokenType,
         source_line: u32,
         start_char: u32,
         end_char: u32,
-        data: String,
+        pub data: String,
     }
 
     pub fn lex<P>(filename: P) -> Vec<TokenInfo>
@@ -298,9 +298,6 @@ mod lexer {
             let mut collector: Vec<super::TokenInfo> = Vec::new();
             super::lexinternal(lines, &mut collector);
 
-            //assert_eq!(collector.len(), 5);
-            //assert_eq!(collector[1].start_char, 6);
-
             print!("Token list:");
             for i in collector.into_iter() {
                 print!("{}:{},", i.token_type as i32, i.data);
@@ -308,16 +305,6 @@ mod lexer {
         }
 
         #[ignore]
-        #[test]
-        fn test_regex() {
-            use regex::Regex;
-
-            let re = Regex::new(r"{{(1}?").unwrap();
-            for mat2 in re.find_iter(r"{sss{") {
-                println!("Found {} {}", mat2.start(), mat2.end());
-            }
-        }
-
         #[test]
         fn test_succeeding() {
             let paths = fs::read_dir("test\\valid").unwrap();
@@ -344,7 +331,6 @@ mod lexer {
             ];
 
             for i in tokenlist.into_iter() {
-                //let ty = &i.token_type;
                 println!("{}:{}", &i.token_type, &i.data)
             }
 

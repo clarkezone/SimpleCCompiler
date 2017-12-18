@@ -1,8 +1,9 @@
 mod test;
 mod fileutils;
 mod lexer;
-extern crate regex;
+mod ast;
+mod codegen;
 
 fn main() {
-    println!("Hello, world!");   
+    println!("Hello, world!");
 }
