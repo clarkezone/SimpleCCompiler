@@ -49,11 +49,11 @@ pub mod ast {
     {
         let root = AstNode::new(AstNodeType::Program);
 
-        let mut boxedRoot = Box::new(root);
+        let mut boxed_root = Box::new(root);
 
-        parse_ast(&mut boxedRoot, arg, errorf);
+        parse_ast(&mut boxed_root, arg, errorf);
 
-        return boxedRoot;
+        return boxed_root;
     }
 
     fn parse_ast<F>(node: &mut Box<AstNode>, tokens: &mut Iter<lexer::TokenInfo>, errorf: &F)
@@ -146,9 +146,9 @@ pub mod ast {
             }
             AstNodeType::Expression => {
                 //consume value
-                let mut token_wrapped = tokens.next();
+                let token_wrapped = tokens.next();
                 //TODO error check
-                let mut token = token_wrapped.unwrap();
+                let token = token_wrapped.unwrap();
                 if token.token_type != lexer::TokenType::Intliteral {
                     errorf(String::from("Wrong token type: expceted int literal"));
                 }
@@ -160,9 +160,9 @@ pub mod ast {
     }
 
     mod test {
+        #[allow(unused_imports)]
         use lexer::*;
         use std::fs;
-        use std::borrow::Borrow;
 
         #[test]
         //#[ignore]

@@ -22,7 +22,7 @@ fn main() {
     }
 
     let thepath = Path::new(args.index(1));
-    let outputPath = Path::new("output.S");
+    let output_path = Path::new("output.S");
 
     let token_list = lex(thepath);
 
@@ -32,7 +32,6 @@ fn main() {
         std::process::exit(-1);
     });
 
-    let mut emit_stack: &mut Vec<String> = &mut Vec::new();
     let mut code_gen = CodeGenState::new(result);
-    code_gen.generate_code_to_file(outputPath);
+    code_gen.generate_code_to_file(output_path);
 }

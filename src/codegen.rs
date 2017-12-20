@@ -62,9 +62,9 @@ pub mod codegen {
                     argstack.push(node.data.clone());
                 }
                 AstNodeType::Statement => {
-                    let retArg = argstack.pop();
+                    let ret_arg = argstack.pop();
                     &mut emitstack.push(String::from("ret"));
-                    &mut emitstack.push(String::from(format!("mov ${}, %eax", retArg.unwrap())));
+                    &mut emitstack.push(String::from(format!("mov ${}, %eax", ret_arg.unwrap())));
                 }
                 AstNodeType::Function => {
                     &mut emitstack.push(String::from("main:"));
@@ -79,45 +79,33 @@ pub mod codegen {
         use lexer::*;
         use std::fs;
         use ast::*;
+        use std::path::Path;
 
         #[test]
-        fn test_succeeding() {
-            let paths = fs::read_dir("test\\valid").unwrap();
-            for path in paths {
-                let thepath = path.unwrap();
-                println!("Testing parser against name: {}", thepath.path().display());
-                let token_list = lexer::lex(thepath.path());
+        fn test_good_codegen() {
+            let thepath = Path::new("test\\valid\\return_2.c");
+            let token_list = lexer::lex(thepath);
 
-                let mut iter = token_list.iter();
-                let result = ast::parse(&mut iter, &|x: String| {});
+            let mut iter = token_list.iter();
+            let result = ast::parse(&mut iter, &|_s| {});
 
-                let mut emit_stack: &mut Vec<String> = &mut Vec::new();
-                let mut code_gen = super::CodeGenState::new(result);
-                code_gen.generate_code(&mut emit_stack);
+            let mut emit_stack: &mut Vec<String> = &mut Vec::new();
+            let mut code_gen = super::CodeGenState::new(result);
+            code_gen.generate_code(&mut emit_stack);
 
-                let expectedlines = vec![
-                    String::from(".globl main"),
-                    String::from("main:"),
-                    String::from("mov "),
-                    String::from(r"she{int}ss"),
-                    String::from(r"she{ int }ssintss"),
-                    String::from(r"int 111;"),
-                ];
+            let expectedlines = vec![
+                String::from(".globl main"),
+                String::from("main:"),
+                String::from("mov $2, %eax"),
+                String::from("ret"),
+            ];
 
-                let itt = expectedlines.iter();
-                //TODO:
-                // for i in emit_stack.into_iter() {
-                //     itt.
-                //     print!("{}:{},", i.token_type as i32, i.data);
-                // }
+            let mut itt = expectedlines.iter();
 
-                //verify emit_stack
+            for i in emit_stack.into_iter().rev() {
+                let emmit_res = itt.next();
+                assert_eq!(i, emmit_res.unwrap());
             }
-        }
-
-        #[test]
-        fn test_succeeding_write() {
-            //TODO test writing to file
         }
     }
 }

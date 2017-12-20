@@ -69,7 +69,7 @@ pub mod lexer {
             let mut advanced: bool = false;
 
             match classified {
-                CharClassified::Alpha(al) => {
+                CharClassified::Alpha(_al) => {
                     //TODO: use AL rather than lastchar
                     let result = readallconf(&mut bb, &mut slast_char, |x: &char| {
                         return is_word_char(x);
@@ -113,7 +113,7 @@ pub mod lexer {
 
                     advanced = result.1;
                 }
-                CharClassified::Number(al) => {
+                CharClassified::Number(_al) => {
                     let result =
                         readallconf(&mut bb, &mut slast_char, |x: &char| return is_number(x));
                     //println!("Found number:{}", result.0);
@@ -182,7 +182,7 @@ pub mod lexer {
                     };
                     collector.push(new_token_info);
                 }
-                CharClassified::Symbol(al) => {} //println!("Found other symbol {}", al),
+                CharClassified::Symbol(_al) => {} //println!("Found other symbol {}", al),
             }
 
             if !advanced {
