@@ -283,7 +283,7 @@ pub mod lexer {
 
     mod tests {
         use std::fs;
-        #[ignore]
+        //#[ignore]
         #[test]
         fn test_token_extract() {
             let lines = vec![
@@ -304,7 +304,7 @@ pub mod lexer {
             }
         }
 
-        #[ignore]
+        //#[ignore]
         #[test]
         fn test_succeeding() {
             let paths = fs::read_dir("test\\valid").unwrap();

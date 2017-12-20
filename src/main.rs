@@ -27,7 +27,10 @@ fn main() {
     let token_list = lex(thepath);
 
     let mut iter = token_list.iter();
-    let result = parse(&mut iter);
+    let result = parse(&mut iter, &|x: String| {
+        println!("Error: {}", x);
+        std::process::exit(-1);
+    });
 
     let mut emit_stack: &mut Vec<String> = &mut Vec::new();
     let mut code_gen = CodeGenState::new(result);

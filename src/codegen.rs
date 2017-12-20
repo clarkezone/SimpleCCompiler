@@ -33,9 +33,9 @@ pub mod codegen {
             match self.current_node {
                 Some(ref valid) => {
                     self.generate_code_recurse(valid, arg_stack, emit_stack);
-                    for i in &mut emit_stack.iter().rev() {
-                        println!("EMMIT:{}", i);
-                    }
+                    // for i in &mut emit_stack.iter().rev() {
+                    //     println!("EMMIT:{}", i);
+                    // }
                 }
                 None => {
                     unreachable!();
@@ -56,7 +56,7 @@ pub mod codegen {
                 None => {} //break recursion by not calling recurse, continuing execution
             }
 
-            println!("CODEGEN: {:?}", &node.node_type);
+            //println!("CODEGEN: {:?}", &node.node_type);
             match node.node_type {
                 AstNodeType::Expression => {
                     argstack.push(node.data.clone());
@@ -89,7 +89,7 @@ pub mod codegen {
                 let token_list = lexer::lex(thepath.path());
 
                 let mut iter = token_list.iter();
-                let result = ast::parse(&mut iter);
+                let result = ast::parse(&mut iter, &|x: String| {});
 
                 let mut emit_stack: &mut Vec<String> = &mut Vec::new();
                 let mut code_gen = super::CodeGenState::new(result);
@@ -105,6 +105,7 @@ pub mod codegen {
                 ];
 
                 let itt = expectedlines.iter();
+                //TODO:
                 // for i in emit_stack.into_iter() {
                 //     itt.
                 //     print!("{}:{},", i.token_type as i32, i.data);

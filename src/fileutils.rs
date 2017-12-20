@@ -20,7 +20,7 @@ where
 {
     let mut file = File::create(filename).expect("error creating file");
     for i in lines.iter().rev() {
-        println!("Writing {}", &i);
+        //println!("Writing {}", &i);
         let result = file.write_all(i.as_bytes());
         file.write(String::from("\r\n").as_bytes());
     }
