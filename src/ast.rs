@@ -15,7 +15,7 @@ pub mod ast {
 
     pub struct AstNode {
         pub node_type: AstNodeType,
-        data: String,
+        pub data: String,
         pub child: Option<Box<AstNode>>,
     }
 
