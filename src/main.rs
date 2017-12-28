@@ -44,12 +44,7 @@ fn main() {
 fn gcc_compile(file_path: &PathBuf) {
     let mut naked = file_path.clone();
     naked.set_extension("");
-    let clean_str = match naked.to_str() {
-        Some(s) => s,
-        None => {
-            panic!("broken");
-        }
-    };
+    let clean_str = naked.to_str().expect("broken");
 
     let compile = format!("gcc {}.S -o {}", clean_str, clean_str);
     if cfg!(target_os = "windows") {
@@ -72,13 +67,7 @@ fn gcc_compile(file_path: &PathBuf) {
             .expect("failed to execute process")
     };
 
-    let hello = std::str::from_utf8(&output.stdout);
-    match hello {
-        Ok(s) => {
-            println!("result:{}", s);
-        }
-        Err(_) => {
-            panic!("Can't read string");
-        }
-    }
+    println!("status: {}", output.status);
+    println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
+    println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
 }
