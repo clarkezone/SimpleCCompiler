@@ -66,7 +66,7 @@ fn gcc_compile(file_path: &PathBuf) {
     } else {
         Command::new("sh")
             .arg("-c")
-            .arg(clean_str)
+            .arg(compile)
             .output()
             .expect("failed to execute process")
     };
