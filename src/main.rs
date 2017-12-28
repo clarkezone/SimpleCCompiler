@@ -74,7 +74,7 @@ fn gcc_compile(file_path: &PathBuf) {
     let hello = std::str::from_utf8(&output.stdout);
     match hello {
         Ok(s) => {
-            println!("{}", s);
+            println!("result:{}", s);
         }
         Err(_) => {
             panic!("Can't read string");
