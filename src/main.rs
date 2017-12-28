@@ -22,7 +22,19 @@ fn main() {
     }
 
     let thepath = Path::new(args.index(1));
-    let output_path = Path::new("output.S");
+
+    //let output_file = Path::new("output.S");
+    let output_path = thepath.with_extension("S");
+
+    // output_path = match thepath.parent() {
+    //     Some(p) => {
+    //         //p.join(output_file);
+    //         output_file.with_file_name(file_name)
+    //     }
+    //     None => {
+    //         output_file.as_ref();
+    //     }
+    // };
 
     let token_list = lex(thepath);
 
