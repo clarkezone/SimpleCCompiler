@@ -59,15 +59,17 @@ fn gcc_compile(file_path: &PathBuf) {
             .output()
             .expect("failed to execute process")
     } else {
-        println!("{}", compile);
         Command::new("sh")
             .arg("-c")
-            .arg(compile)
+            .arg(&compile)
             .output()
             .expect("failed to execute process")
     };
 
-    println!("status: {}", output.status);
-    println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
-    println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
+    if !output.status.success() {
+        println!("{}", compile);
+        println!("status: {}", output.status);
+        println!("stdout: {}", String::from_utf8_lossy(&output.stdout));
+        println!("stderr: {}", String::from_utf8_lossy(&output.stderr));
+    }
 }
