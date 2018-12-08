@@ -67,8 +67,8 @@ pub mod codegen {
                     &mut emitstack.push(String::from(format!("mov ${}, %eax", ret_arg.unwrap())));
                 }
                 AstNodeType::Function => {
-                    &mut emitstack.push(String::from("main:"));
-                    &mut emitstack.push(String::from(".globl main"));
+                    &mut emitstack.push(String::from("_main:"));
+                    &mut emitstack.push(String::from(".globl _main"));
                 }
                 AstNodeType::Program => {}
             }
